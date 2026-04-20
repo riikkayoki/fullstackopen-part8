@@ -1,0 +1,50 @@
+name: E2E tests (library)
+
+on:
+  # push:
+  #   branches: [main, master]
+  workflow_dispatch:
+
+env:
+  WORK_DIR: "part8"
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install library-backend dependencies
+        working-directory: ${{ env.WORK_DIR }}/library-backend
+        run: npm install
+
+      - name: Install library-frontend dependencies
+        working-directory: ${{ env.WORK_DIR }}/library-frontend
+        run: npm install
+
+      - name: Install E2E test dependencies
+        working-directory: ${{ env.WORK_DIR }}/e2e-tests
+        run: npm install
+
+      - name: Install Playwright browsers
+        working-directory: ${{ env.WORK_DIR }}/e2e-tests
+        run: npx playwright install chromium --with-deps
+
+      - name: Run E2E tests
+        working-directory: ${{ env.WORK_DIR }}/e2e-tests
+        run: npx playwright test
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: ${{ env.WORK_DIR }}/e2e-tests/playwright-report/
+          retention-days: 7
