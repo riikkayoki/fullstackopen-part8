@@ -25,14 +25,35 @@ describe('Library app', () => {
   describe('Login', () => {
     test('login button is shown when not logged in', async ({ page }) => {
       await expect(page.getByRole('button', { name: 'login' })).toBeVisible()
+    })
+
+    test('add book button is not shown when not logged in', async ({
+      page,
+    }) => {
       await expect(
         page.getByRole('button', { name: 'add book' }),
       ).not.toBeVisible()
+    })
+
+    test('recommend button is not shown when not logged in', async ({
+      page,
+    }) => {
       await expect(
         page.getByRole('button', { name: 'recommend' }),
       ).not.toBeVisible()
+    })
+
+    test('logout button is not shown when not logged in', async ({ page }) => {
       await expect(
         page.getByRole('button', { name: 'logout' }),
+      ).not.toBeVisible()
+    })
+
+    test('set birthyear form is not shown when not logged in', async ({
+      page,
+    }) => {
+      await expect(
+        page.getByRole('heading', { name: /set birth ?year/i }),
       ).not.toBeVisible()
     })
 
@@ -52,7 +73,7 @@ describe('Library app', () => {
     test('login fails with wrong password', async ({ page }) => {
       await loginWith(page, 'testuser', 'wrong')
 
-      await expect(page.getByText('Login failed')).toBeVisible()
+      await expect(page.getByText(/login failed/i)).toBeVisible()
     })
   })
 
