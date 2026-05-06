@@ -104,17 +104,12 @@ const loginWith = async (page, username, password) => {
 const createBook = async (page, { title, author, published, genres }) => {
   await page.getByRole('button', { name: 'add book' }).click()
 
-  const titleInput = page.locator('input').first()
-  const authorInput = page.locator('input').nth(1)
-  const publishedInput = page.locator('input[type="number"]')
-  const genreInput = page.locator('input').nth(3)
-
-  await titleInput.fill(title)
-  await authorInput.fill(author)
-  await publishedInput.fill(String(published))
+  await page.getByLabel('title').fill(title)
+  await page.getByLabel('author').fill(author)
+  await page.getByLabel('published').fill(String(published))
 
   for (const genre of genres) {
-    await genreInput.fill(genre)
+    await page.getByLabel('genre').fill(genre)
     await page.getByRole('button', { name: 'add genre' }).click()
   }
 
