@@ -116,7 +116,6 @@ const typeDefs = `
     allAuthors: [Author!]!
   }
 `
-const bookCountByAuthor = books.filter((book) => book.author === root.name).length
 
 const resolvers = {
   Query: {
@@ -126,7 +125,8 @@ const resolvers = {
     allAuthors: () => authors,
   },
   Author: {
-    bookCount: bookCountByAuthor,
+    bookCount: (root) =>
+      books.filter((book) => book.author === root.name).length,
   },
 }
 
