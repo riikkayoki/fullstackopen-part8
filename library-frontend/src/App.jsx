@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import Recommend from './components/Recommend'
 import LoginForm from './components/LoginForm'
 import { useAuth } from './hooks/useAuth'
 import { useNotification } from './hooks/useNotification'
@@ -29,6 +30,7 @@ const App = () => {
         {token ? (
           <>
             <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={() => setPage('recommend')}>recommend</button>
             <button onClick={handleLogout}>logout</button>
           </>
         ) : (
@@ -41,6 +43,8 @@ const App = () => {
       <Books show={page === 'books'} />
 
       <NewBook show={page === 'add'} />
+
+      <Recommend show={page === 'recommend'} />
 
       <LoginForm show={page === 'login'} onLogin={login} />
     </div>
