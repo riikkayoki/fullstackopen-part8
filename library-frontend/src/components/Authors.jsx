@@ -1,9 +1,17 @@
+import { useEffect } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { ALL_AUTHORS } from '../queries'
 import UpdateBirthYearForm from './UpdateBirthYearForm'
 
-const Authors = ({ show }) => {
+const Authors = ({ show, loggedIn }) => {
   const result = useQuery(ALL_AUTHORS)
+  const { refetch } = result
+
+  useEffect(() => {
+    if (show) {
+      refetch()
+    }
+  }, [show, refetch])
 
   if (!show) {
     return null
@@ -39,7 +47,7 @@ const Authors = ({ show }) => {
         </tbody>
       </table>
 
-      <UpdateBirthYearForm authors={authors} />
+      {loggedIn && <UpdateBirthYearForm authors={authors} />}
     </div>
   )
 }
