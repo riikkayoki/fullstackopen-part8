@@ -8,33 +8,25 @@ const collectGenres = (books) => {
   return uniqueGenres
 }
 
-const filterByGenre = (books, genre) => {
-  if (!genre) {
-    return books
-  }
-  return books.filter((book) => book.genres.includes(genre))
-}
-
 const Books = ({ show }) => {
-  const result = useQuery(ALL_BOOKS)
   const [genre, setGenre] = useState(null)
+  const allBooksResult = useQuery(ALL_BOOKS)
+  const booksInGenreResult = useQuery(ALL_BOOKS, { variables: { genre } })
 
   if (!show) {
     return null
   }
 
-  if (result.loading) {
+  if (allBooksResult.loading) {
     return <div>Loading...</div>
   }
 
-  if (result.error) {
-    return <div>Failed to load books: {result.error.message}</div>
+  if (allBooksResult.error) {
+    return <div>Failed to load books: {allBooksResult.error.message}</div>
   }
 
-  const books = result.data.allBooks
-
-  const genres = collectGenres(books)
-  const booksToShow = filterByGenre(books, genre)
+  const genres = collectGenres(allBooksResult.data.allBooks)
+  const booksToShow = booksInGenreResult.data?.allBooks ?? []
 
   return (
     <div>
@@ -53,11 +45,11 @@ const Books = ({ show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {booksToShow.map((a) => (
-            <tr key={a.id}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
+          {booksToShow.map((book) => (
+            <tr key={book.id}>
+              <td>{book.title}</td>
+              <td>{book.author.name}</td>
+              <td>{book.published}</td>
             </tr>
           ))}
         </tbody>
