@@ -8,13 +8,13 @@ const filterByGenre = (books, genre) =>
 const Recommend = ({ show }) => {
   const myInfoResult = useQuery(ME)
   const allBooksResult = useQuery(ALL_BOOKS)
-  const { refetch: refetchAllBooks } = allBooksResult
+  const { refetch: refetchMyInfo } = myInfoResult
 
   useEffect(() => {
     if (show) {
-      refetchAllBooks()
+      refetchMyInfo()
     }
-  }, [show, refetchAllBooks])
+  }, [show, refetchMyInfo])
 
   if (!show) {
     return null

@@ -9,7 +9,7 @@ export const useAuth = (notify, onLoggedIn) => {
   const client = useApolloClient()
 
   const [loginMutation] = useMutation(LOGIN, {
-    onError: (error) => notify?.(error.message),
+    onError: (error) => notify?.(`login failed: ${error.message}`),
     onCompleted: (data) => {
       const value = data.login.value
       setToken(value)
